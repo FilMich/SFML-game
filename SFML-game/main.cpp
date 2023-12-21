@@ -3,11 +3,26 @@
 #include "SFML/Network.hpp"
 #include "SFML/Window.hpp"
 #include "SFML/Audio.hpp"
-
+#include <iostream>
 
 int main() {
 
 	sf::RenderWindow win(sf::VideoMode(800, 600), "game", sf::Style::Default);
+	
+	sf::SoundBuffer soundBuffer;
+
+	if (!soundBuffer.loadFromFile("background.mp3"))
+	{
+		std::cout << "dfgh" << std::endl;
+	}
+
+	sf::Sound sound;
+	sound.setBuffer(soundBuffer);
+	sound.play();
+
+	std::cout << sound.getVolume();
+
+	
 
 	sf::CircleShape ball;
 	ball.setFillColor(sf::Color::Green);
@@ -23,6 +38,15 @@ int main() {
 			{
 				win.close();
 			}
+		}
+		
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		{
+			sound.setVolume(sound.getVolume() + 10);
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		{
+			sound.setVolume(sound.getVolume() - 10);
 		}
 
 		win.clear();
