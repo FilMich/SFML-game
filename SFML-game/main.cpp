@@ -7,7 +7,7 @@
 
 int main() {
 
-	sf::RenderWindow win(sf::VideoMode(800, 600), "game", sf::Style::Default);
+	sf::RenderWindow win(sf::VideoMode(), "game", sf::Style::Fullscreen);
 	
 	sf::SoundBuffer soundBuffer;
 
@@ -18,9 +18,10 @@ int main() {
 
 	sf::Sound sound;
 	sound.setBuffer(soundBuffer);
+	sound.setVolume(50);
 	sound.play();
 
-	std::cout << sound.getVolume();
+	std::cout << "volume : " << sound.getVolume() << std::endl;
 
 	
 
@@ -38,16 +39,27 @@ int main() {
 			{
 				win.close();
 			}
+			else if (event.type == sf::Event::KeyPressed) {
+				// Check if the Up or Down key is pressed
+				if (event.key.code == sf::Keyboard::Up && sound.getVolume() < 110) {
+					sound.setVolume(sound.getVolume() + 10);
+					std::cout << "Volume + \n Current volume: " << sound.getVolume() << std::endl;
+				}
+				else if (event.key.code == sf::Keyboard::Down && sound.getVolume() > 10 ) {
+					sound.setVolume(sound.getVolume() - 10);
+					std::cout << "Volume - \n Current volume: " << sound.getVolume() << std::endl;
+				}
+			}
 		}
 		
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		{
-			sound.setVolume(sound.getVolume() + 10);
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		{
-			sound.setVolume(sound.getVolume() - 10);
-		}
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		//{
+		//	sound.setVolume(sound.getVolume() + 1);
+		//}
+		//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		//{
+		//	sound.setVolume(sound.getVolume() - 1);
+		//}
 
 		win.clear();
 		win.draw(ball);
