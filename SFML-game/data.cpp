@@ -3,7 +3,7 @@
 Data::Data()
 {
 	this->players = new std::vector<Player*>();
-	this->players->push_back(new Player(1, { 0,0 }, sf::Color::Green));
+	//this->players->push_back(new Player(1, { 0,0 }, sf::Color::Green));
 }
 
 Data::~Data()

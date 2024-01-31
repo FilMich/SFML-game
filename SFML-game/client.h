@@ -2,6 +2,7 @@
 #include "SFML/Network.hpp"
 #include <iostream>
 #include "processor.h"
+#include <thread>
 class Client
 {
 public:
@@ -11,6 +12,10 @@ public:
 	void connect();
 	void send(const std::string& message);
 	void receive();
+	void startRecieve() {
+		std::thread serverThread(&Client::receive, this);
+		serverThread.detach(); // Detach the thread to allow it to run independently
+	}
 private:
 	Processor* processor;
 	sf::TcpSocket* socket;

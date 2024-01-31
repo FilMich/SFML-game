@@ -42,10 +42,10 @@ void Lobby::draw()
     window->draw(*bg);
     window->draw(text);
     window->draw(*readyRect);
-    //std::cout << this->players->size() << std::endl;
+    std::cout << this->players->size() << std::endl;
     
     for (auto p : *this->players) {
-        std::cout << "position " << p->getShape()->getPosition().x << "x " << p->getShape()->getPosition().y << "y " << std::endl;
+        //std::cout << "position " << p->getShape()->getPosition().x << "x " << p->getShape()->getPosition().y << "y " << std::endl;
         window->draw(*p->getShape());
     }
     window->display();

@@ -1,10 +1,10 @@
 #include "client.h"
 
-Client::Client(Data* data, Processor* processor)
+Client::Client(Data* data, Processor* processor) : processor(processor)
 {
     this->socket = new sf::TcpSocket;
     this->selector = new sf::SocketSelector;
-    this->processor = processor;
+    //this->processor = processor;
 }
 
 Client::~Client()
@@ -20,6 +20,7 @@ void Client::connect()
     else {
         std::cout << "Connected to the server\n";
     }
+    startRecieve();
 }
 
 void Client::send(const std::string& message)
@@ -33,13 +34,16 @@ void Client::send(const std::string& message)
 
 void Client::receive()
 {
-    if (selector->isReady(*socket)) {
-        sf::Packet packet;
-        if (socket->receive(packet) == sf::Socket::Done) {
-            std::string received;
-            packet >> received;
-            std::cout << "Received from the server: " << received << std::endl;
-            processor->unpackData(received);
+    while (true)
+    {
+        if (selector->isReady(*socket)) {
+            sf::Packet packet;
+            if (socket->receive(packet) == sf::Socket::Done) {
+                std::string received;
+                packet >> received;
+                std::cout << "Received from the server: " << received << std::endl;
+                processor->unpackData(received);
+            }
         }
     }
 }

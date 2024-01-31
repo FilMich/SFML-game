@@ -31,6 +31,7 @@ int main() {
 	}
 	if (mainMenu.getNext() == 1)
 	{
+		win->setTitle("Client");
 		Data* data = new Data();
 		Processor* processor = new Processor(data);
 		Lobby lobby(win, data);
@@ -43,39 +44,40 @@ int main() {
 	}
 	else if(mainMenu.getNext() == 2)
 	{
+		win->setTitle("Server");
 		Data* data = new Data();
 		Processor* processor = new Processor(data);
 		Lobby lobby(win, data);
 
 		Server server(data, processor);
-		server.run();
+		//data->addPlayer(11, { 200,200 }, sf::Color::Black);
+		server.start();
 
 		
 		lobby.run_lobby();
 	}
+	return 0;
+}
 
 
-
-
-
-	/*sf::RenderWindow wind(sf::VideoMode(800, 600), "server");
+/*sf::RenderWindow wind(sf::VideoMode(800, 600), "server");
 	while (c == 0)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) { 
-			c = 1; 
-			wind.close(); 
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+			c = 1;
+			wind.close();
 		}
 
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) { 
-			c = 2; 
-			wind.close(); 
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
+			c = 2;
+			wind.close();
 		}
 	}
 	Data data;
-	sf::RenderWindow* win = new sf::RenderWindow(sf::VideoMode(1280, 720), "game", sf::Style::Default); 
+	sf::RenderWindow* win = new sf::RenderWindow(sf::VideoMode(1280, 720), "game", sf::Style::Default);
 	if (c == 1)
 	{
-		
+
 		Server server(data);
 		server.run();
 
@@ -122,16 +124,12 @@ int main() {
 				}
 			}
 		}
-		
+
 		win.clear();
 		win.draw(ball);
 		win.display();
-		
+
 	}*/
-
-	return 0;
-}
-
 
 //int main() {
 //

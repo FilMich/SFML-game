@@ -1,9 +1,9 @@
 #include "server.h"
 
-Server::Server(Data* data, Processor* processor)
+Server::Server(Data* data, Processor* processor) :data(data), processor(processor)
 {
-    data = data;
-    processor = processor;
+    //data = data;
+    //processor = processor;
     this->listener = new sf::TcpListener;
     this->selector = new sf::SocketSelector;
     //this->players = data->getPlayers();
@@ -42,33 +42,9 @@ Server::~Server()
 
 void Server::run()
 {
+    //std::cout << this->data->getPlayers()->size();
     sf::IpAddress ip = sf::IpAddress::getLocalAddress();
     std::cout << ip;
-
-    //if (this->listener->listen(53000) != sf::Socket::Done) {
-    //    std::cerr << "Error: Failed to bind the listener to port " << 53000 << std::endl;
-    //    return;
-    //}
-    //this->selector->add(*listener);
-
-    //while (true) {
-    //    std::cout << "Waiting for activity...\n";
-    //    if (this->selector->wait()) {
-    //        if (this->selector->isReady(*this->listener)) {
-
-    //            std::cout << "handle \n";
-    //            sf::TcpSocket* newClient = new sf::TcpSocket;
-    //            if (this->listener->accept(*newClient) == sf::Socket::Done) {
-    //                std::cout << "new player";
-
-    //                this->players->push_back(new Player(newClient, 0, sf::Color::Green));
-    //                this->selector->add(*newClient);
-
-    //            }
-
-    //        }
-    //    }
-    //}
 
     if (this->listener->listen(53000) != sf::Socket::Done) {
         std::cerr << "Error: Failed to bind the listener to port " << 53000 << std::endl;
@@ -95,6 +71,7 @@ void Server::run()
 
 void Server::handleNewConnection()
 {
+    //this->data->addPlayer(11, { 300,300 }, sf::Color::Red);
     std::cout << "handle \n";
     sf::TcpSocket* newClient = new sf::TcpSocket;
     newClient->setBlocking(false);
@@ -102,12 +79,14 @@ void Server::handleNewConnection()
         std::cout << "new player";
         int newClientId = assignUniqueId();
         sf::Color newClientColor = assignUniqueColor();
-        sf::Vector2f pos = { 100, 100 };
+        sf::Vector2f pos = { 100 + x, 100 };
         this->data->addPlayer(newClientId, pos, newClientColor);
         //this->players->push_back(new Player(newClientId, {100,100 }, newClientColor));
         this->selector->add(*newClient);
+        this->clients->push_back(newClient);
         broadcastPlayers(this->data->getPlayers(), this->clients);
         //sendPlayerInfoToAll(newClient, this->clients);
+        x = x + 100.00;
     }
     else
     {
