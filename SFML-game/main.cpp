@@ -18,8 +18,7 @@ int main() {
 	sf::RenderWindow* win = new sf::RenderWindow(sf::VideoMode(1280, 720), "game", sf::Style::Default);
 	Menu menu(win);
 	MainMenu mainMenu(win); 
-	Data* data = new Data();
-	Lobby lobby(win, data);
+	
 	//lobby.run_lobby();
 
 	if (menu.getRun())
@@ -32,9 +31,11 @@ int main() {
 	}
 	if (mainMenu.getNext() == 1)
 	{
-		//lobby.run_lobby();
+		Data* data = new Data();
+		Processor* processor = new Processor(data);
+		Lobby lobby(win, data);
 
-		Client client;
+		Client client(data, processor);
 		client.connect();
 		
 		lobby.run_lobby();
@@ -42,9 +43,11 @@ int main() {
 	}
 	else if(mainMenu.getNext() == 2)
 	{
-		//lobby.run_lobby();
+		Data* data = new Data();
+		Processor* processor = new Processor(data);
+		Lobby lobby(win, data);
 
-		Server server(data);
+		Server server(data, processor);
 		server.run();
 
 		

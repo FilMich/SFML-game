@@ -146,6 +146,7 @@
     <ClCompile Include="mainMenu.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="processor.cpp" />
     <ClCompile Include="server.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +156,7 @@
     <ClInclude Include="mainMenu.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="processor.h" />
     <ClInclude Include="server.h" />
   </ItemGroup>
   <ItemGroup>

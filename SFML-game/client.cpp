@@ -1,8 +1,10 @@
 #include "client.h"
 
-Client::Client()
+Client::Client(Data* data, Processor* processor)
 {
     this->socket = new sf::TcpSocket;
+    this->selector = new sf::SocketSelector;
+    this->processor = processor;
 }
 
 Client::~Client()
@@ -12,32 +14,32 @@ Client::~Client()
 void Client::connect()
 {
     std::cout << "Connecting to the server...\n";
-    if (socket->connect("192.168.154.187", 53000) != sf::Socket::Done) {
+    if (socket->connect("192.168.0.239", 53000) != sf::Socket::Done) {
         std::cerr << "Failed to connect to the server" << std::endl;
     }
     else {
         std::cout << "Connected to the server\n";
     }
-
 }
 
-void Client::sendMessage(const std::string& message)
+void Client::send(const std::string& message)
 {
     sf::Packet packet;
     packet << message;
     if (socket->send(packet) != sf::Socket::Done) {
-        std::cerr << "Failed to send message to the server" << std::endl;
+        std::cerr << "Failed to send to the server" << std::endl;
     }
 }
 
-void Client::receiveMessage()
+void Client::receive()
 {
     if (selector->isReady(*socket)) {
         sf::Packet packet;
         if (socket->receive(packet) == sf::Socket::Done) {
-            std::string receivedMessage;
-            packet >> receivedMessage;
-            std::cout << "Received message from the server: " << receivedMessage << std::endl;
+            std::string received;
+            packet >> received;
+            std::cout << "Received from the server: " << received << std::endl;
+            processor->unpackData(received);
         }
     }
 }

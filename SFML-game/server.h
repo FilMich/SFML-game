@@ -4,11 +4,12 @@
 #include "player.h"
 #include "data.h"
 #include <iostream>
+#include "processor.h"
 
 class Server
 {
 public:
-	Server(Data* data);
+	Server(Data* data, Processor* processor);
 	~Server();
 	void run();
 	void handleNewConnection();
@@ -16,11 +17,14 @@ public:
 	int assignUniqueId();
 	sf::Color assignUniqueColor();
 	void sendPlayerInfoToAll(sf::TcpSocket* newClient, std::vector<sf::TcpSocket*>* clients);
-	void broadcast(std::vector<Player*>* players, std::vector<sf::TcpSocket*>* clients);
+	void broadcastPlayers(std::vector<Player*>* players, std::vector<sf::TcpSocket*>* clients);
+	void broadcastMessage(std::vector<Player*>* players, std::vector<sf::TcpSocket*>* clients, std::string message);
 	void processPacket(sf::TcpSocket* client,sf::Packet);
 private:
+	Processor* processor;
+	Data* data;
 	sf::TcpListener* listener;
 	sf::SocketSelector* selector;
-	std::vector<Player*>* players;
+	//std::vector<Player*>* players;
 	std::vector<sf::TcpSocket*>* clients;
 };

@@ -1,10 +1,12 @@
 #include "server.h"
 
-Server::Server(Data* data)
+Server::Server(Data* data, Processor* processor)
 {
+    data = data;
+    processor = processor;
     this->listener = new sf::TcpListener;
     this->selector = new sf::SocketSelector;
-    this->players = data->getPlayers();
+    //this->players = data->getPlayers();
     this->clients = new std::vector<sf::TcpSocket*>();
 }
 
@@ -13,7 +15,7 @@ Server::~Server()
     delete this->listener;
     delete this->selector;
     delete this->clients;
-    delete this->players;
+    //delete this->players;
 }
 
 /*void Server::run()
@@ -40,7 +42,6 @@ Server::~Server()
 
 void Server::run()
 {
-
     sf::IpAddress ip = sf::IpAddress::getLocalAddress();
     std::cout << ip;
 
@@ -96,14 +97,21 @@ void Server::handleNewConnection()
 {
     std::cout << "handle \n";
     sf::TcpSocket* newClient = new sf::TcpSocket;
+    newClient->setBlocking(false);
     if (this->listener->accept(*newClient) == sf::Socket::Done) {
         std::cout << "new player";
         int newClientId = assignUniqueId();
         sf::Color newClientColor = assignUniqueColor();
-        this->players->push_back(new Player({100,100}, newClientId, newClientColor));
+        sf::Vector2f pos = { 100, 100 };
+        this->data->addPlayer(newClientId, pos, newClientColor);
+        //this->players->push_back(new Player(newClientId, {100,100 }, newClientColor));
         this->selector->add(*newClient);
-
-        sendPlayerInfoToAll(newClient, this->clients);
+        broadcastPlayers(this->data->getPlayers(), this->clients);
+        //sendPlayerInfoToAll(newClient, this->clients);
+    }
+    else
+    {
+        delete newClient;
     }
 }
 
@@ -115,7 +123,11 @@ void Server::handleClientActivity()
             sf::Packet packet;
             if (client->receive(packet) == sf::Socket::Done)
             {
-                processPacket(client, packet);
+                std::string message;
+                packet >> message;
+                processor->unpackData(message);
+                broadcastMessage(this->data->getPlayers(), this->clients, message);
+                //processPacket(client, packet);
             }
         }
     }
@@ -166,9 +178,18 @@ void Server::sendPlayerInfoToAll(sf::TcpSocket* newClient, std::vector<sf::TcpSo
     }
 }
 
-void Server::broadcast(std::vector<Player*>* players, std::vector<sf::TcpSocket*>* clients)
+void Server::broadcastPlayers(std::vector<Player*>* players, std::vector<sf::TcpSocket*>* clients)
 {
+    sf::Packet packet;
     for (sf::TcpSocket* client : *clients) {
+        for (Player* player : *players) {
+            packet << (processor->packData("update", player->getID(), player->getPos(), player->getColor()));
+            client->send(packet);
+        }
+    }
+
+
+    /*for (sf::TcpSocket* client : *clients) {
         for (Player* player : *players) {
             sf::Packet packet;
             sf::Color color = player->getColor();
@@ -203,16 +224,27 @@ void Server::broadcast(std::vector<Player*>* players, std::vector<sf::TcpSocket*
             client->send(packet);
         }
         
-    }
+    }*/
 }
 
-void Server::processPacket(sf::TcpSocket* client,sf::Packet packet)
+void Server::broadcastMessage(std::vector<Player*>* players, std::vector<sf::TcpSocket*>* clients, std::string message)
 {
-
-    std::string s;
-    packet >> s;
-    if (s == "addNewPlayer")
-    {
-        players->push_back(new Player({100,100}, 1, sf::Color().Yellow));
+    sf::Packet packet;
+    for (sf::TcpSocket* client : *clients) {
+        for (Player* player : *players) {
+            packet << message;
+            client->send(packet);
+        }
     }
 }
+
+//void Server::processPacket(sf::TcpSocket* client,sf::Packet packet)
+//{
+//
+//    std::string s;
+//    packet >> s;
+//    if (s == "addNewPlayer")
+//    {
+//        players->push_back(new Player({100,100}, 1, sf::Color().Yellow));
+//    }
+//}

@@ -1,6 +1,6 @@
 #include "player.h"
 
-Player::Player(sf::Vector2f position, int ID, sf::Color color)
+Player::Player(int ID, sf::Vector2f position, sf::Color color)
 {
 	this->position = sf::Vector2f(100, 100);
 	this->shape = new sf::CircleShape(20);

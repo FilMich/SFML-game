@@ -5,13 +5,14 @@ class Player
 {
 public:
 	//Player() {};
-	Player(sf::Vector2f position, int ID, sf::Color color);
+	Player(int ID, sf::Vector2f position, sf::Color color);
 	~Player();
 	void setPos(sf::Vector2f position) { this->position = position; this->shape->setPosition(position); }
 	sf::CircleShape* getShape() { return this->shape; }
 	int getID() { return this->ID; }
 	sf::Color getColor() { return this->color; }
 	sf::Vector2f getPos() { return this->position; }
+	void setColor(sf::Color color) { this->color = color; }
 private:
 	
 	int ID;

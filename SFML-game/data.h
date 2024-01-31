@@ -8,7 +8,12 @@ public:
 	Data();
 	~Data();
 
-	void addPlayer(sf::TcpSocket* newPlayer, int ID, sf::Color color);
+	void addPlayer(int ID, sf::Vector2f pos,sf::Color color);
+	void updatePlayer(int ID, sf::Vector2f pos,sf::Color color);
+	void updatePlayerColor(int ID,sf::Color color);
+	void updatePlayerPos(int ID, sf::Vector2f pos);
+	Player* findPlayerWithID(int ID);
+	//bool existsPlayerWithID(int ID);
 	std::vector<Player*>* getPlayers();
 
 private:
