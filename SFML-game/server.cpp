@@ -46,6 +46,7 @@ void Server::run()
     sf::IpAddress ip = sf::IpAddress::getLocalAddress();
     std::cout << ip;
     this->data->addPlayer(0, {100,100}, sf::Color::Red);
+    this->data->setMyID(0);
     if (this->listener->listen(53000) != sf::Socket::Done) {
         std::cerr << "Error: Failed to bind the listener to port " << 53000 << std::endl;
         return;
@@ -77,7 +78,7 @@ void Server::handleNewConnection()
     newClient->setBlocking(false);
     if (this->listener->accept(*newClient) == sf::Socket::Done) {
         std::cout << "new player";
-        int newClientId = assignUniqueId();
+        int newClientId = assignUniqueId(newClient);
         sf::Color newClientColor = assignUniqueColor();
         sf::Vector2f pos = assignUniquePos();
         this->data->addPlayer(newClientId, pos, newClientColor);
@@ -121,10 +122,13 @@ void Server::handleClientActivity()
     }
 }
 
-int Server::assignUniqueId()
+int Server::assignUniqueId(sf::TcpSocket* client)
 {
-    
-    return static_cast<int>(this->clients->size()) + 1;
+    int id = static_cast<int>(this->clients->size()) + 1;
+    sf::Packet packet;
+    packet << ("yourID," + std::to_string(id));
+    client->send(packet);
+    return id;
 }
 
 sf::Vector2f Server::assignUniquePos()

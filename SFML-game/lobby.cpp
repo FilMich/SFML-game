@@ -5,6 +5,7 @@ Lobby::Lobby(sf::RenderWindow* window, Data* data) :data(data)
     //this->players = data->getPlayers();
     this->window = window;
     this->readyRect = new sf::RectangleShape();
+    this->playerReady = new sf::RectangleShape();
     this->font = new sf::Font();
     this->image = new sf::Texture();
     this->bg = new sf::Sprite();
@@ -42,11 +43,36 @@ void Lobby::draw()
     window->draw(*bg);
     window->draw(text);
     window->draw(*readyRect);
-    std::cout << this->data->getPlayers()->size() << std::endl;
+    std::cout << this->data->getMyID() << std::endl;
     
+    
+
     for (auto p : *this->data->getPlayers()) {
         //std::cout << "position " << p->getShape()->getPosition().x << "x " << p->getShape()->getPosition().y << "y " << std::endl;
         window->draw(*p->getShape());
+        sf::RectangleShape* playerReady = new sf::RectangleShape();
+        sf::Text* myIDNumber = new sf::Text;
+        playerReady->setSize(sf::Vector2f(23, 26));
+        playerReady->setPosition(p->getPos().x + 7, p->getPos().y - 35);
+
+        myIDNumber->setFont(*font);
+        myIDNumber->setString(std::to_string(p->getID()));
+        myIDNumber->setPosition(p->getPos().x + 13, p->getPos().y + 10);
+        myIDNumber->setCharacterSize(10);
+        myIDNumber->setOutlineColor(sf::Color::Green);
+
+        window->draw(*myIDNumber);
+
+        /*if (p->isReadyToPlay())
+        {
+            playerReady->setFillColor(sf::Color::Green);
+        }
+        playerReady->setFillColor(sf::Color::Red);*/
+
+        p->isReadyToPlay() ? playerReady->setFillColor(sf::Color::Green) : playerReady->setFillColor(sf::Color::Red);
+    
+        window->draw(*playerReady);
+        //p->isReadyToPlay() ? playerReady->setFillColor(sf::Color::Green) : playerReady->setFillColor(sf::Color::Red);
     }
     window->display();
 }
@@ -89,9 +115,9 @@ void Lobby::set_values()
     text.setOutlineColor(sf::Color::Black);
     text.setPosition({450,600});
     
-    readyRect->setSize(sf::Vector2f(23, 26));
-    readyRect->setPosition(600, 500);
-    readyRect->setFillColor(sf::Color::Red);
+    //readyRect->setSize(sf::Vector2f(23, 26));
+    //readyRect->setPosition(600, 500);
+    //readyRect->setFillColor(sf::Color::Red);
 }
 
 void Lobby::loop_events()
@@ -110,14 +136,18 @@ void Lobby::loop_events()
             if (event.key.code == sf::Mouse::Left) {
                 if (text.getGlobalBounds().contains(mouse_coord))
                 {
-                    if (readyRect->getFillColor() == sf::Color::Green)
+
+                    //after clicking ready check will change color for all players
+
+
+                    /*if (readyRect->getFillColor() == sf::Color::Green)
                     {
                         readyRect->setFillColor(sf::Color::Red);
                     }
                     else
                     {
                         readyRect->setFillColor(sf::Color::Green);
-                    }
+                    }*/
 
                 }
             }

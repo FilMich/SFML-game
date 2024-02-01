@@ -9,7 +9,8 @@ class Processor
 public:
 	Processor(Data* data);
 	~Processor();
-
+	std::string colorToString(sf::Color color);
+	sf::Color stringToColor(std::string color);
 	void processData(std::string action);
 	void unpackData(std::string message);
 	std::string packData(std::string action, int paID, sf::Vector2f pos, sf::Color color);

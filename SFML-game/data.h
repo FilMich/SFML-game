@@ -12,10 +12,13 @@ public:
 	void updatePlayer(int ID, sf::Vector2f pos,sf::Color color);
 	void updatePlayerColor(int ID,sf::Color color);
 	void updatePlayerPos(int ID, sf::Vector2f pos);
+	void setMyID(int myID) { this->myID = myID; }
+	int getMyID() { return this->myID; }
 	Player* findPlayerWithID(int ID);
 	//bool existsPlayerWithID(int ID);
 	std::vector<Player*>* getPlayers();
 
 private:
 	std::vector<Player*>* players;
+	int myID;
 };

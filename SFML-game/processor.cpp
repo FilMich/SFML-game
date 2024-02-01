@@ -11,45 +11,39 @@ Processor::~Processor()
 {
 }
 
-void Processor::processData(std::string action)
+std::string Processor::colorToString(sf::Color color)
 {
-	if (action == "add")
+	std::string strColor;
+	if (color == sf::Color().Blue)
 	{
-		this->data->addPlayer(intID, { intPosx,intPosy}, color); 
+		strColor = "blue";
 	}
-	else if (action == "update")
+	else if (color == sf::Color().Green)
 	{
-		this->data->updatePlayer(intID, { intPosx,intPosy }, color);
+		strColor = "green";
 	}
-	else if (action == "updatePos")
+	else if (color == sf::Color().Magenta)
 	{
-		this->data->updatePlayerPos(intID, { intPosx,intPosy });
+		strColor = "magenta";
 	}
-	else if (action == "updateCol")
+	else if (color == sf::Color().Red)
 	{
-		this->data->updatePlayerColor(intID, color);
+		strColor = "red";
 	}
+	else if (color == sf::Color().Black)
+	{
+		strColor = "black";
+	}
+	else if (color == sf::Color().Yellow)
+	{
+		strColor = "yellow";
+	}
+	return strColor;
 }
 
-void Processor::unpackData(std::string message)
+sf::Color Processor::stringToColor(std::string strColor)
 {
-	std::istringstream iss(message);
-	//std::string action;
-	//std::string ID;
-	//std::string strColor;
-	//std::string posx;
-	//std::string posy;
-	//sf::Color color;
-	std::getline(iss, action, ',');
-	std::getline(iss, ID, ',');
-	std::getline(iss, posx, ',');
-	std::getline(iss, posy, ',');
-	std::getline(iss, strColor, ',');
-
-	intID = std::stoi(ID);
-	intPosx = std::stof(posx);
-	intPosy = std::stof(posy);
-
+	sf::Color color;
 	if (strColor == "blue")
 	{
 		color = sf::Color().Blue;
@@ -74,6 +68,72 @@ void Processor::unpackData(std::string message)
 	{
 		color = sf::Color().Red;
 	}
+	return color;
+}
+
+void Processor::processData(std::string action)
+{
+	if (action == "add")
+	{
+		this->data->addPlayer(intID, { intPosx,intPosy}, color); 
+	}
+	else if (action == "update")
+	{
+		this->data->updatePlayer(intID, { intPosx,intPosy }, color);
+	}
+	else if (action == "updatePos")
+	{
+		this->data->updatePlayerPos(intID, { intPosx,intPosy });
+	}
+	else if (action == "updateCol")
+	{
+		this->data->updatePlayerColor(intID, color);
+	}
+	else if (action == "yourID")
+	{
+		this->data->setMyID(intID);
+	}
+}
+
+void Processor::unpackData(std::string message)
+{
+	std::istringstream issCount(message);
+	std::istringstream iss(message);
+	std::string word;
+	int wordCount = 0;
+
+	while (std::getline(issCount, word, ',')) {
+		wordCount++;
+	}
+
+	if (wordCount == 5)
+	{
+		std::getline(iss, action, ','); 
+		std::getline(iss, ID, ','); 
+		std::getline(iss, posx, ','); 
+		std::getline(iss, posy, ','); 
+		std::getline(iss, strColor, ','); 
+
+		intID = std::stoi(ID); 
+		intPosx = std::stof(posx); 
+		intPosy = std::stof(posy); 
+
+		color = stringToColor(strColor);
+	}
+	else if (wordCount == 2)
+	{
+		std::getline(iss, action, ','); 
+		std::getline(iss, ID, ',');
+
+		intID = std::stoi(ID); 
+	}
+	//std::string action;
+	//std::string ID;
+	//std::string strColor;
+	//std::string posx;
+	//std::string posy;
+	//sf::Color color;
+	
 
 	processData(action);
 
@@ -90,30 +150,7 @@ std::string Processor::packData(std::string action, int paID, sf::Vector2f pos, 
 	posx = std::to_string(pos.x);
 	posy = std::to_string(pos.y);
 
-	if (color == sf::Color().Blue) 
-	{
-		strColor = "blue";
-	}
-	else if (color == sf::Color().Green)  
-	{
-		strColor = "green"; 
-	}
-	else if (color == sf::Color().Magenta) 
-	{
-		strColor = "magenta";
-	}
-	else if (color == sf::Color().Red)
-	{
-		strColor = "red";
-	}
-	else if (color == sf::Color().Black)
-	{
-		strColor = "black";
-	}
-	else if (color == sf::Color().Yellow) 
-	{
-		strColor = "yellow";
-	}
+	strColor = colorToString(color);
 
 	return action + "," + ID + "," + posx + "," + posy + "," + strColor;
 }

@@ -15,7 +15,7 @@ public:
 	void run();
 	void handleNewConnection();
 	void handleClientActivity();
-	int assignUniqueId();
+	int assignUniqueId(sf::TcpSocket* client);
 	sf::Vector2f assignUniquePos();
 	sf::Color assignUniqueColor();
 	void sendPlayerInfoToAll(sf::TcpSocket* newClient, std::vector<sf::TcpSocket*>* clients);

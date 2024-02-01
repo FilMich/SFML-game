@@ -29,6 +29,7 @@ private:
 	sf::Text text;
 	std::vector<sf::Text> texts;
 	std::vector<std::size_t> sizes;
+	//std::vector<sf::RectangleShape*> readyChecks;
 
 	void set_values();
 	void loop_events();
