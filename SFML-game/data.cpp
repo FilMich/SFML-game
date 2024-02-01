@@ -12,8 +12,15 @@ Data::~Data()
 
 void Data::addPlayer(int ID, sf::Vector2f pos, sf::Color color)
 {
-	Player* player = new Player(ID, pos, color);
-	this->players->push_back(player);
+	if (findPlayerWithID(ID) == nullptr)
+	{
+		Player* player = new Player(ID, pos, color);
+		this->players->push_back(player);
+	}
+	else
+	{
+		updatePlayer(ID, pos, color);
+	}
 }
 
 void Data::updatePlayer(int ID, sf::Vector2f pos, sf::Color color)

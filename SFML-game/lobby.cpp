@@ -1,8 +1,8 @@
 #include "lobby.h"
 
-Lobby::Lobby(sf::RenderWindow* window, Data* data)
+Lobby::Lobby(sf::RenderWindow* window, Data* data) :data(data)
 {
-    this->players = data->getPlayers();
+    //this->players = data->getPlayers();
     this->window = window;
     this->readyRect = new sf::RectangleShape();
     this->font = new sf::Font();
@@ -42,9 +42,9 @@ void Lobby::draw()
     window->draw(*bg);
     window->draw(text);
     window->draw(*readyRect);
-    std::cout << this->players->size() << std::endl;
+    std::cout << this->data->getPlayers()->size() << std::endl;
     
-    for (auto p : *this->players) {
+    for (auto p : *this->data->getPlayers()) {
         //std::cout << "position " << p->getShape()->getPosition().x << "x " << p->getShape()->getPosition().y << "y " << std::endl;
         window->draw(*p->getShape());
     }

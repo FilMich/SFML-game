@@ -12,11 +12,11 @@ public:
 	void connect();
 	void send(const std::string& message);
 	void receive();
-	void startRecieve() {
-		std::thread serverThread(&Client::receive, this);
-		serverThread.detach(); // Detach the thread to allow it to run independently
-	}
+	void startRecieve();
+	void startRecieveLoop();
+	
 private:
+	std::thread receiveThread;
 	Processor* processor;
 	sf::TcpSocket* socket;
 	sf::SocketSelector* selector;

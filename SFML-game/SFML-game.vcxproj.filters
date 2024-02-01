@@ -31,18 +31,12 @@
     <Filter Include="Data">
       <UniqueIdentifier>{cba2860b-5796-4d99-a356-17e1859f9f67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{79d5f76c-36c8-43be-92cd-24c73c4ef31a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="client.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="menu.cpp">
@@ -60,17 +54,17 @@
     <ClCompile Include="processor.cpp">
       <Filter>Processor</Filter>
     </ClCompile>
+    <ClCompile Include="client.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="server.cpp">
+      <Filter>Server</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="client.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="server.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="menu.h">
       <Filter>Menu</Filter>
     </ClInclude>
@@ -85,6 +79,15 @@
     </ClInclude>
     <ClInclude Include="processor.h">
       <Filter>Processor</Filter>
+    </ClInclude>
+    <ClInclude Include="client.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="server.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

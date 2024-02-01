@@ -45,7 +45,7 @@ void Server::run()
     //std::cout << this->data->getPlayers()->size();
     sf::IpAddress ip = sf::IpAddress::getLocalAddress();
     std::cout << ip;
-
+    this->data->addPlayer(0, {100,100}, sf::Color::Red);
     if (this->listener->listen(53000) != sf::Socket::Done) {
         std::cerr << "Error: Failed to bind the listener to port " << 53000 << std::endl;
         return;
@@ -79,14 +79,23 @@ void Server::handleNewConnection()
         std::cout << "new player";
         int newClientId = assignUniqueId();
         sf::Color newClientColor = assignUniqueColor();
-        sf::Vector2f pos = { 100 + x, 100 };
+        sf::Vector2f pos = assignUniquePos();
         this->data->addPlayer(newClientId, pos, newClientColor);
         //this->players->push_back(new Player(newClientId, {100,100 }, newClientColor));
         this->selector->add(*newClient);
         this->clients->push_back(newClient);
+
+        /*sf::Packet packetttt;
+        std::string s = "sdfghj";
+        packetttt << s;
+        newClient->send(packetttt);*/
+
         broadcastPlayers(this->data->getPlayers(), this->clients);
+
+        
+
         //sendPlayerInfoToAll(newClient, this->clients);
-        x = x + 100.00;
+        
     }
     else
     {
@@ -114,7 +123,15 @@ void Server::handleClientActivity()
 
 int Server::assignUniqueId()
 {
-    return this->clients->size() + 1;
+    
+    return static_cast<int>(this->clients->size()) + 1;
+}
+
+sf::Vector2f Server::assignUniquePos()
+{
+    x = x + 100.00;
+    return sf::Vector2f(x + 100.00, 100.00);
+    std::cout << x <<std::endl;
 }
 
 sf::Color Server::assignUniqueColor()
@@ -159,14 +176,16 @@ void Server::sendPlayerInfoToAll(sf::TcpSocket* newClient, std::vector<sf::TcpSo
 
 void Server::broadcastPlayers(std::vector<Player*>* players, std::vector<sf::TcpSocket*>* clients)
 {
-    sf::Packet packet;
+
     for (sf::TcpSocket* client : *clients) {
+        sf::Packet packet;
         for (Player* player : *players) {
-            packet << (processor->packData("update", player->getID(), player->getPos(), player->getColor()));
+            std::string s = processor->packData("add", player->getID(), player->getPos(), player->getColor());
+            packet << (s);
             client->send(packet);
+            packet.clear();
         }
     }
-
 
     /*for (sf::TcpSocket* client : *clients) {
         for (Player* player : *players) {

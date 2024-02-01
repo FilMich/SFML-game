@@ -19,8 +19,11 @@ void Client::connect()
     }
     else {
         std::cout << "Connected to the server\n";
+        this->selector->add(*socket);
+
+        startRecieve();
     }
-    startRecieve();
+    //receive();
 }
 
 void Client::send(const std::string& message)
@@ -34,16 +37,30 @@ void Client::send(const std::string& message)
 
 void Client::receive()
 {
-    while (true)
+    if (selector->wait(sf::seconds(0.1)))
     {
         if (selector->isReady(*socket)) {
             sf::Packet packet;
             if (socket->receive(packet) == sf::Socket::Done) {
-                std::string received;
+                std::string received = "";
                 packet >> received;
                 std::cout << "Received from the server: " << received << std::endl;
                 processor->unpackData(received);
+                packet.clear();
             }
         }
+    }
+}
+
+void Client::startRecieve()
+{
+    receiveThread = std::thread(&Client::startRecieveLoop, this);
+}
+
+void Client::startRecieveLoop()
+{
+    while (true)
+    {
+        receive();
     }
 }

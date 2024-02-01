@@ -11,11 +11,13 @@ public:
 	void run_lobby();
 
 private:
-	std::vector<Player*>* players;
+	Data* data;
+	//std::vector<Player*>* players;
 	int pos;
 	bool pressed, theselect;
 	sf::RenderWindow* window;
 	sf::RectangleShape* readyRect;
+	sf::RectangleShape* playerReady;
 	sf::Font* font;
 	sf::Texture* image;
 	sf::Sprite* bg;

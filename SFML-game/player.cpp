@@ -8,6 +8,7 @@ Player::Player(int ID, sf::Vector2f position, sf::Color color)
 	this->shape->setPosition(this->position);
 	this->ID = ID;
 	this->color = color;
+	readyToPlay = false;
 }
 
 Player::~Player()

@@ -86,33 +86,33 @@ std::string Processor::packData(std::string action, int paID, sf::Vector2f pos, 
 	std::string posy = "" + ID;
 
 	std::string sColor = "";*/
-	ID = paID;
-	posx = pos.x;
-	posy = pos.y;
+	ID = std::to_string(paID);
+	posx = std::to_string(pos.x);
+	posy = std::to_string(pos.y);
 
 	if (color == sf::Color().Blue) 
 	{
-		strColor = "Blue";
+		strColor = "blue";
 	}
 	else if (color == sf::Color().Green)  
 	{
-		strColor = "Green"; 
+		strColor = "green"; 
 	}
 	else if (color == sf::Color().Magenta) 
 	{
-		strColor = "Magenta";
+		strColor = "magenta";
 	}
 	else if (color == sf::Color().Red)
 	{
-		strColor = "Red";
+		strColor = "red";
 	}
 	else if (color == sf::Color().Black)
 	{
-		strColor = "Black";
+		strColor = "black";
 	}
 	else if (color == sf::Color().Yellow) 
 	{
-		strColor = "Yellow";
+		strColor = "yellow";
 	}
 
 	return action + "," + ID + "," + posx + "," + posy + "," + strColor;
