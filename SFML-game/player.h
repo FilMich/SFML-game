@@ -14,14 +14,15 @@ public:
 	sf::Vector2f getPos() { return this->position; }
 	void setColor(sf::Color color) { this->color = color; }
 	bool isReadyToPlay() { return readyToPlay; }
-	void setReadyToPlay() { !readyToPlay; }
+	void setReadyToPlay() { this->readyToPlay = true; }
+	void setNotReadyToPlay() { this->readyToPlay = false; }
 private:
 	
 	int ID;
 	sf::Color color;
 	sf::CircleShape* shape;
 	sf::Vector2f position = {0,0};
-	bool readyToPlay;
+	bool readyToPlay = false;
 	//int HP; 
 	//bool alive; 
 	//bool dmgTaken; 

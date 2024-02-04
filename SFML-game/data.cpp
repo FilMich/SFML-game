@@ -63,6 +63,24 @@ void Data::updatePlayerPos(int ID, sf::Vector2f pos)
 	player->setPos(pos);
 }
 
+void Data::setIsReadyToPlay(int ID)
+{
+	Player* player = findPlayerWithID(ID);
+	player->setReadyToPlay();
+}
+
+void Data::setIsNotReadyToPlay(int ID)
+{
+	Player* player = findPlayerWithID(ID);
+	player->setNotReadyToPlay();
+}
+
+bool Data::getIsReadyToPlay(int ID)
+{
+	Player* player = findPlayerWithID(ID);
+	return player->isReadyToPlay();
+}
+
 Player* Data::findPlayerWithID(int ID)
 {
 	for (Player* player : *players) {

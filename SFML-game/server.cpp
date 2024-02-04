@@ -60,12 +60,47 @@ void Server::run()
             if (this->selector->isReady(*this->listener)) {
                 std::cout << "New connection detected.\n";
                 handleNewConnection();
+                //createFileWithData();
             }
             else {
                 std::cout << "Client activity detected.\n";
                 handleClientActivity();
+                //createFileWithData();
+            }
+            
+        }
+    }
+}
+
+void Server::createFileWithData()
+{
+    std::ofstream outputFile("dataOfPlayers.txt");
+
+    if (outputFile.is_open()) {
+        // Write data to the file
+        outputFile << "My ID: " << data->getMyID() << "\n";
+        for (Player* player : *data->getPlayers()) {
+            outputFile << "Player ID: " << player->getID() << "\n";
+            if (player->isReadyToPlay())
+            {
+                outputFile << "Player is ready to play " << "\n";
+            }
+            else
+            {
+                outputFile << "Player is not ready to play " << "\n";
             }
         }
+        //outputFile << "Player ID: " << data->getMyID() << "\n";
+        //outputFile << "Player ID: " << data->getMyID() << "\n";
+        //outputFile << "Player Name: " << data->getPlayerName() << "\n";
+        // Add more lines to write other data as needed
+
+        // Close the file
+        outputFile.close();
+        std::cout << "File created successfully.\n";
+    }
+    else {
+        std::cerr << "Unable to open file: " << "data" << "\n";
     }
 }
 
@@ -91,8 +126,8 @@ void Server::handleNewConnection()
         packetttt << s;
         newClient->send(packetttt);*/
 
-        broadcastPlayers(this->data->getPlayers(), this->clients);
-
+        broadcastPlayers(this->data->getPlayers());
+        createFileWithData();
         
 
         //sendPlayerInfoToAll(newClient, this->clients);
@@ -114,8 +149,10 @@ void Server::handleClientActivity()
             {
                 std::string message;
                 packet >> message;
+                std::cout << message;
                 processor->unpackData(message);
-                broadcastMessage(this->data->getPlayers(), this->clients, message);
+                broadcastMessage(this->data->getPlayers(), message);
+                createFileWithData();
                 //processPacket(client, packet);
             }
         }
@@ -178,10 +215,10 @@ void Server::sendPlayerInfoToAll(sf::TcpSocket* newClient, std::vector<sf::TcpSo
     }
 }
 
-void Server::broadcastPlayers(std::vector<Player*>* players, std::vector<sf::TcpSocket*>* clients)
+void Server::broadcastPlayers(std::vector<Player*>* players)
 {
 
-    for (sf::TcpSocket* client : *clients) {
+    for (sf::TcpSocket* client : *this->clients) {
         sf::Packet packet;
         for (Player* player : *players) {
             std::string s = processor->packData("add", player->getID(), player->getPos(), player->getColor());
@@ -229,10 +266,10 @@ void Server::broadcastPlayers(std::vector<Player*>* players, std::vector<sf::Tcp
     }*/
 }
 
-void Server::broadcastMessage(std::vector<Player*>* players, std::vector<sf::TcpSocket*>* clients, std::string message)
+void Server::broadcastMessage(std::vector<Player*>* players, std::string message)
 {
     sf::Packet packet;
-    for (sf::TcpSocket* client : *clients) {
+    for (sf::TcpSocket* client : *this->clients) {
         for (Player* player : *players) {
             packet << message;
             client->send(packet);

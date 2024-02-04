@@ -33,10 +33,11 @@ int main() {
 	{
 		win->setTitle("Client");
 		Data* data = new Data();
+		data->setIsClient();
 		Processor* processor = new Processor(data);
-		Lobby lobby(win, data);
+		Lobby lobby(win, data, processor);
 
-		Client client(data, processor);
+		Client& client = client.getInstance(data, processor);
 		client.connect();
 		
 		lobby.run_lobby();
@@ -46,10 +47,11 @@ int main() {
 	{
 		win->setTitle("Server");
 		Data* data = new Data();
+		data->setIsNotClient();
 		Processor* processor = new Processor(data);
-		Lobby lobby(win, data);
+		Lobby lobby(win, data, processor);
 
-		Server server(data, processor);
+		Server& server = server.getInstance(data, processor);
 		//data->addPlayer(11, { 200,200 }, sf::Color::Black);
 		server.start();
 

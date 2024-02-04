@@ -14,6 +14,7 @@ public:
 	void processData(std::string action);
 	void unpackData(std::string message);
 	std::string packData(std::string action, int paID, sf::Vector2f pos, sf::Color color);
+	std::string packData(std::string action, int paID);
 
 private:
 	Data* data;

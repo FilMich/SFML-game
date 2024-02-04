@@ -162,6 +162,9 @@
   <ItemGroup>
     <Font Include="..\..\pong\pong\ethn.otf" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="diagram.cd" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

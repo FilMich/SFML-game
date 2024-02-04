@@ -14,6 +14,12 @@ public:
 	void updatePlayerPos(int ID, sf::Vector2f pos);
 	void setMyID(int myID) { this->myID = myID; }
 	int getMyID() { return this->myID; }
+	void setIsClient() { isClient = true; }
+	void setIsNotClient() { isClient = false; }
+	void setIsReadyToPlay(int ID);
+	void setIsNotReadyToPlay(int ID);
+	bool getIsReadyToPlay(int ID);
+	bool amIClient() { return this->isClient; }
 	Player* findPlayerWithID(int ID);
 	//bool existsPlayerWithID(int ID);
 	std::vector<Player*>* getPlayers();
@@ -21,4 +27,5 @@ public:
 private:
 	std::vector<Player*>* players;
 	int myID;
+	bool isClient;
 };

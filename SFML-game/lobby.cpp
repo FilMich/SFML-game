@@ -1,6 +1,6 @@
 #include "lobby.h"
 
-Lobby::Lobby(sf::RenderWindow* window, Data* data) :data(data)
+Lobby::Lobby(sf::RenderWindow* window, Data* data, Processor* processor) :data(data), processor(processor)
 {
     //this->players = data->getPlayers();
     this->window = window;
@@ -43,7 +43,7 @@ void Lobby::draw()
     window->draw(*bg);
     window->draw(text);
     window->draw(*readyRect);
-    std::cout << this->data->getMyID() << std::endl;
+    //std::cout << this->data->getMyID() << std::endl;
     
     
 
@@ -68,8 +68,17 @@ void Lobby::draw()
             playerReady->setFillColor(sf::Color::Green);
         }
         playerReady->setFillColor(sf::Color::Red);*/
+        
+        if (p->isReadyToPlay())
+        {
+            playerReady->setFillColor(sf::Color::Green);
+        }
+        else
+        {
+            playerReady->setFillColor(sf::Color::Red);
+        }
 
-        p->isReadyToPlay() ? playerReady->setFillColor(sf::Color::Green) : playerReady->setFillColor(sf::Color::Red);
+        /*p->isReadyToPlay() ? playerReady->setFillColor(sf::Color::Green) : playerReady->setFillColor(sf::Color::Red);*/
     
         window->draw(*playerReady);
         //p->isReadyToPlay() ? playerReady->setFillColor(sf::Color::Green) : playerReady->setFillColor(sf::Color::Red);
@@ -139,6 +148,37 @@ void Lobby::loop_events()
 
                     //after clicking ready check will change color for all players
 
+                    if (data->getIsReadyToPlay(data->getMyID()))
+                    {
+                        data->setIsNotReadyToPlay(data->getMyID());
+                        if (data->amIClient())
+                        {
+                            Client& client = client.getInstance(data, processor);
+                            client.send(processor->packData("isNotReadyToPlay", data->getMyID()));
+                        }
+                        else
+                        {
+                            Server& server = server.getInstance(data, processor);
+                            server.broadcastMessage(data->getPlayers(), processor->packData("isNotReadyToPlay", data->getMyID()));
+                        }
+                    }
+                    else
+                    {
+                        data->setIsReadyToPlay(data->getMyID());
+                        if (data->amIClient())
+                        {
+                            Client& client = client.getInstance(data, processor);
+                            client.send(processor->packData("isReadyToPlay", data->getMyID()));
+                        }
+                        else
+                        {
+                            Server& server = server.getInstance(data, processor);
+                            server.broadcastMessage(data->getPlayers(), processor->packData("isReadyToPlay", data->getMyID()));
+                        }
+                    }
+
+                    
+                    //client.send()
 
                     /*if (readyRect->getFillColor() == sf::Color::Green)
                     {

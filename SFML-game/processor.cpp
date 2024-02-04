@@ -93,6 +93,15 @@ void Processor::processData(std::string action)
 	{
 		this->data->setMyID(intID);
 	}
+	else if (action == "isReadyToPlay")
+	{
+		this->data->setIsReadyToPlay(intID);
+	}
+	else if (action == "isNotReadyToPlay")
+	{
+		this->data->setIsNotReadyToPlay(intID);
+	}
+
 }
 
 void Processor::unpackData(std::string message)
@@ -153,4 +162,10 @@ std::string Processor::packData(std::string action, int paID, sf::Vector2f pos, 
 	strColor = colorToString(color);
 
 	return action + "," + ID + "," + posx + "," + posy + "," + strColor;
+}
+
+std::string Processor::packData(std::string action, int paID)
+{
+	ID = std::to_string(paID); 
+	return action + "," + ID; 
 }

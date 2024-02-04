@@ -2,16 +2,20 @@
 #include "SFML/Graphics.hpp"
 #include <iostream>
 #include "data.h"
+#include "processor.h"
+#include "client.h"
+#include "server.h"
 class Lobby
 {
 public:
-	Lobby(sf::RenderWindow* window, Data* data);
+	Lobby(sf::RenderWindow* window, Data* data, Processor* processor);
 	~Lobby();
 
 	void run_lobby();
 
 private:
 	Data* data;
+	Processor* processor;
 	//std::vector<Player*>* players;
 	int pos;
 	bool pressed, theselect;

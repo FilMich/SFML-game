@@ -55,6 +55,7 @@ void Client::receive()
 void Client::startRecieve()
 {
     receiveThread = std::thread(&Client::startRecieveLoop, this);
+    receiveThread.detach();
 }
 
 void Client::startRecieveLoop()
