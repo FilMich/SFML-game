@@ -11,8 +11,8 @@
 class Server
 {
 public:
-	static Server& getInstance(Data* data, Processor* processor) {
-		static Server instance(data, processor);
+	static Server& getInstance() {
+		static Server instance;
 		return instance;
 	}
 
@@ -35,9 +35,7 @@ public:
 		serverThread.detach(); // Detach the thread to allow it to run independently
 	}
 private:
-	Server(Data* data, Processor* processor);
-	Processor* processor;
-	Data* data;
+	Server();
 	sf::TcpListener* listener;
 	sf::SocketSelector* selector;
 	//std::vector<Player*>* players;

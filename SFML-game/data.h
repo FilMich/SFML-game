@@ -5,7 +5,13 @@
 class Data
 {
 public:
-	Data();
+
+	static Data& getInstance() {
+		static Data instance;
+		return instance;
+	}
+
+	//Data();
 	~Data();
 
 	void addPlayer(int ID, sf::Vector2f pos,sf::Color color);
@@ -21,10 +27,13 @@ public:
 	bool getIsReadyToPlay(int ID);
 	bool amIClient() { return this->isClient; }
 	Player* findPlayerWithID(int ID);
+	bool arePlayersReady();
 	//bool existsPlayerWithID(int ID);
 	std::vector<Player*>* getPlayers();
 
 private:
+	Data();
+	// MOZNO musim pridat mutex a zamknut data ktore idem menit/gettovat
 	std::vector<Player*>* players;
 	int myID;
 	bool isClient;

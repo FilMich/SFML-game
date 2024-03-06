@@ -2,9 +2,8 @@
 #include <iostream>
 
 
-Processor::Processor(Data* data)
+Processor::Processor()
 {
-	this->data = data;
 }
 
 Processor::~Processor()
@@ -71,35 +70,45 @@ sf::Color Processor::stringToColor(std::string strColor)
 	return color;
 }
 
-void Processor::processData(std::string action)
+void Processor::processData(std::string action, int intID, int intPosx, int intPosy, sf::Color color)
 {
+	/*int intID;
+	int intPosx;
+	int intPosy;
+	sf::Color color;*/
+
+	Data& data = data.getInstance();
 	if (action == "add")
 	{
-		this->data->addPlayer(intID, { intPosx,intPosy}, color); 
+		data.addPlayer(intID, sf::Vector2f(intPosx,intPosy), color);
 	}
 	else if (action == "update")
 	{
-		this->data->updatePlayer(intID, { intPosx,intPosy }, color);
+		data.updatePlayer(intID, sf::Vector2f(intPosx, intPosy), color);
 	}
 	else if (action == "updatePos")
 	{
-		this->data->updatePlayerPos(intID, { intPosx,intPosy });
+		data.updatePlayerPos(intID, sf::Vector2f(intPosx, intPosy));
 	}
 	else if (action == "updateCol")
 	{
-		this->data->updatePlayerColor(intID, color);
+		data.updatePlayerColor(intID, color);
 	}
 	else if (action == "yourID")
 	{
-		this->data->setMyID(intID);
+		data.setMyID(intID);
 	}
 	else if (action == "isReadyToPlay")
 	{
-		this->data->setIsReadyToPlay(intID);
+		data.setIsReadyToPlay(intID);
 	}
 	else if (action == "isNotReadyToPlay")
 	{
-		this->data->setIsNotReadyToPlay(intID);
+		data.setIsNotReadyToPlay(intID);
+	}
+	else if (action == "bulletFlying")
+	{
+		data.setIsNotReadyToPlay(intID);
 	}
 
 }
@@ -111,6 +120,17 @@ void Processor::unpackData(std::string message)
 	std::string word;
 	int wordCount = 0;
 
+	std::string action, stringID, stringPosx, stringPosy, stringColor;
+	//std::string stringID;
+	//std::string stringPosx;
+	//std::string stringPosy;
+	//std::string stringColor;
+
+	int intID;
+	int intPosx = 0;
+	int intPosy = 0;
+	sf::Color color;
+
 	while (std::getline(issCount, word, ',')) {
 		wordCount++;
 	}
@@ -118,23 +138,34 @@ void Processor::unpackData(std::string message)
 	if (wordCount == 5)
 	{
 		std::getline(iss, action, ','); 
-		std::getline(iss, ID, ','); 
-		std::getline(iss, posx, ','); 
-		std::getline(iss, posy, ','); 
-		std::getline(iss, strColor, ','); 
+		std::getline(iss, stringID, ',');
+		std::getline(iss, stringPosx, ',');
+		std::getline(iss, stringPosy, ',');
+		std::getline(iss, stringColor, ',');
 
-		intID = std::stoi(ID); 
-		intPosx = std::stof(posx); 
-		intPosy = std::stof(posy); 
+		intID = std::stoi(stringID);
+		intPosx = std::stof(stringPosx);
+		intPosy = std::stof(stringPosy);
 
-		color = stringToColor(strColor);
+		color = stringToColor(stringColor);
 	}
 	else if (wordCount == 2)
 	{
-		std::getline(iss, action, ','); 
-		std::getline(iss, ID, ',');
+		std::getline(iss, action, ',');
+		std::getline(iss, stringID, ',');
 
-		intID = std::stoi(ID); 
+		intID = std::stoi(stringID);
+	}
+	else if (wordCount == 4)
+	{
+		std::getline(iss, action, ',');
+		std::getline(iss, stringID, ',');
+		std::getline(iss, stringPosx, ',');
+		std::getline(iss, stringPosy, ',');
+
+		intID = std::stoi(stringID);
+		intPosx = std::stof(stringPosx);
+		intPosy = std::stof(stringPosy);
 	}
 	//std::string action;
 	//std::string ID;
@@ -144,7 +175,7 @@ void Processor::unpackData(std::string message)
 	//sf::Color color;
 	
 
-	processData(action);
+	processData(action, intID, intPosx, intPosy, color);
 
 }
 
@@ -155,6 +186,7 @@ std::string Processor::packData(std::string action, int paID, sf::Vector2f pos, 
 	std::string posy = "" + ID;
 
 	std::string sColor = "";*/
+	std::string ID, posx, posy, strColor;
 	ID = std::to_string(paID);
 	posx = std::to_string(pos.x);
 	posy = std::to_string(pos.y);
@@ -166,6 +198,16 @@ std::string Processor::packData(std::string action, int paID, sf::Vector2f pos, 
 
 std::string Processor::packData(std::string action, int paID)
 {
+	std::string ID;
 	ID = std::to_string(paID); 
 	return action + "," + ID; 
+}
+
+std::string Processor::packData(std::string action, int paID, const sf::Vector2f& position)
+{
+	std::string ID, posx, posy;
+	ID = std::to_string(paID);
+	posx = std::to_string(position.x);
+	posy = std::to_string(position.y);
+	return action + "," + ID + "," + posx + "," + posy;
 }

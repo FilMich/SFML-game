@@ -1,6 +1,6 @@
 #include "server.h"
 
-Server::Server(Data* data, Processor* processor) :data(data), processor(processor)
+Server::Server()
 {
     //data = data;
     //processor = processor;
@@ -42,11 +42,12 @@ Server::~Server()
 
 void Server::run()
 {
+    Data& data = data.getInstance();
     //std::cout << this->data->getPlayers()->size();
     sf::IpAddress ip = sf::IpAddress::getLocalAddress();
     std::cout << ip;
-    this->data->addPlayer(0, {100,100}, sf::Color::Red);
-    this->data->setMyID(0);
+    data.addPlayer(0, {100,100}, sf::Color::Red);
+    data.setMyID(0);
     if (this->listener->listen(53000) != sf::Socket::Done) {
         std::cerr << "Error: Failed to bind the listener to port " << 53000 << std::endl;
         return;
@@ -74,12 +75,13 @@ void Server::run()
 
 void Server::createFileWithData()
 {
+    Data& data = data.getInstance();
     std::ofstream outputFile("dataOfPlayers.txt");
 
     if (outputFile.is_open()) {
         // Write data to the file
-        outputFile << "My ID: " << data->getMyID() << "\n";
-        for (Player* player : *data->getPlayers()) {
+        outputFile << "My ID: " << data.getMyID() << "\n";
+        for (Player* player : *data.getPlayers()) {
             outputFile << "Player ID: " << player->getID() << "\n";
             if (player->isReadyToPlay())
             {
@@ -107,6 +109,7 @@ void Server::createFileWithData()
 
 void Server::handleNewConnection()
 {
+    Data& data = data.getInstance();
     //this->data->addPlayer(11, { 300,300 }, sf::Color::Red);
     std::cout << "handle \n";
     sf::TcpSocket* newClient = new sf::TcpSocket;
@@ -116,7 +119,7 @@ void Server::handleNewConnection()
         int newClientId = assignUniqueId(newClient);
         sf::Color newClientColor = assignUniqueColor();
         sf::Vector2f pos = assignUniquePos();
-        this->data->addPlayer(newClientId, pos, newClientColor);
+        data.addPlayer(newClientId, pos, newClientColor);
         //this->players->push_back(new Player(newClientId, {100,100 }, newClientColor));
         this->selector->add(*newClient);
         this->clients->push_back(newClient);
@@ -126,7 +129,7 @@ void Server::handleNewConnection()
         packetttt << s;
         newClient->send(packetttt);*/
 
-        broadcastPlayers(this->data->getPlayers());
+        broadcastPlayers(data.getPlayers());
         createFileWithData();
         
 
@@ -141,6 +144,8 @@ void Server::handleNewConnection()
 
 void Server::handleClientActivity()
 {
+    Data& data = data.getInstance();
+    Processor& processor = processor.getInstance();
     for (sf::TcpSocket* client : *this->clients) {
         if (this->selector->isReady(*client))
         {
@@ -150,8 +155,8 @@ void Server::handleClientActivity()
                 std::string message;
                 packet >> message;
                 std::cout << message;
-                processor->unpackData(message);
-                broadcastMessage(this->data->getPlayers(), message);
+                processor.unpackData(message);
+                broadcastMessage(data.getPlayers(), message);
                 createFileWithData();
                 //processPacket(client, packet);
             }
@@ -217,11 +222,11 @@ void Server::sendPlayerInfoToAll(sf::TcpSocket* newClient, std::vector<sf::TcpSo
 
 void Server::broadcastPlayers(std::vector<Player*>* players)
 {
-
+    Processor& processor = processor.getInstance();
     for (sf::TcpSocket* client : *this->clients) {
         sf::Packet packet;
         for (Player* player : *players) {
-            std::string s = processor->packData("add", player->getID(), player->getPos(), player->getColor());
+            std::string s = processor.packData("add", player->getID(), player->getPos(), player->getColor());
             packet << (s);
             client->send(packet);
             packet.clear();

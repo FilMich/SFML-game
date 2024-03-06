@@ -8,16 +8,16 @@
 class Lobby
 {
 public:
-	Lobby(sf::RenderWindow* window, Data* data, Processor* processor);
+	Lobby(sf::RenderWindow* window);
 	~Lobby();
 
 	void run_lobby();
 
 private:
-	Data* data;
-	Processor* processor;
+	bool run = true;
 	//std::vector<Player*>* players;
 	int pos;
+	int countOfReadyP = 0;
 	bool pressed, theselect;
 	sf::RenderWindow* window;
 	sf::RectangleShape* readyRect;

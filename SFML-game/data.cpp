@@ -92,6 +92,19 @@ Player* Data::findPlayerWithID(int ID)
 	return nullptr;
 }
 
+bool Data::arePlayersReady()
+{
+	int playersCount = static_cast<int>(this->players->size());
+	int count = 0;
+	for (Player* p : *this->players) {
+		if (p->isReadyToPlay())
+		{
+			count++;
+		}
+	}
+	return count == playersCount && playersCount != 0;
+}
+
 std::vector<Player*>* Data::getPlayers()
 {
 	return this->players;

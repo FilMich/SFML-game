@@ -1,7 +1,5 @@
 My ID: 0
 Player ID: 0
-Player is not ready to play 
+Player is ready to play 
 Player ID: 1
-Player is not ready to play 
-Player ID: 2
-Player is not ready to play 
+Player is ready to play 

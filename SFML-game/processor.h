@@ -7,18 +7,25 @@
 class Processor
 {
 public:
-	Processor(Data* data);
+
+	static Processor& getInstance() {
+		static Processor instance;
+		return instance;
+	}
+
+	
 	~Processor();
 	std::string colorToString(sf::Color color);
 	sf::Color stringToColor(std::string color);
-	void processData(std::string action);
+	void processData(std::string action, int intID, int intPosx, int intPosy, sf::Color color);
 	void unpackData(std::string message);
 	std::string packData(std::string action, int paID, sf::Vector2f pos, sf::Color color);
 	std::string packData(std::string action, int paID);
+	std::string packData(std::string action, int paID, const sf::Vector2f& position);
 
 private:
-	Data* data;
-	std::string action;
+	Processor();
+	/*std::string action;
 	std::string ID;
 	std::string strColor;
 	std::string posx;
@@ -26,5 +33,5 @@ private:
 	sf::Color color;
 	int intID;
 	float intPosx;
-	float intPosy;
+	float intPosy;*/
 };

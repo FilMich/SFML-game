@@ -34,6 +34,27 @@
     <Filter Include="Player">
       <UniqueIdentifier>{79d5f76c-36c8-43be-92cd-24c73c4ef31a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Playground">
+      <UniqueIdentifier>{7e8e47f0-b7ea-4f5d-8567-26c677e81c9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Playground\Tile">
+      <UniqueIdentifier>{dd06ac18-6415-42e4-a4b4-825e4903cc14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Controls">
+      <UniqueIdentifier>{0f9a0714-1870-48aa-93b4-374943b23ae1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{23cb0cba-34fb-4ab1-b8ab-f3c14f742f23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enums">
+      <UniqueIdentifier>{b57be4b9-7b23-4610-aee7-65d0e7794aa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bullet">
+      <UniqueIdentifier>{da29cf72-f53d-4082-917b-b827272e97f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NPC">
+      <UniqueIdentifier>{2dd9b32b-bea1-4527-a472-a99f3a92a714}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -63,6 +84,24 @@
     <ClCompile Include="player.cpp">
       <Filter>Player</Filter>
     </ClCompile>
+    <ClCompile Include="tile.cpp">
+      <Filter>Playground\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="map.cpp">
+      <Filter>Playground</Filter>
+    </ClCompile>
+    <ClCompile Include="controls.cpp">
+      <Filter>Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="atkBuff.cpp">
+      <Filter>NPC</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="menu.h">
@@ -88,6 +127,30 @@
     </ClInclude>
     <ClInclude Include="player.h">
       <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="tile.h">
+      <Filter>Playground\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="map.h">
+      <Filter>Playground</Filter>
+    </ClInclude>
+    <ClInclude Include="controls.h">
+      <Filter>Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="textureType.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="assetsManager.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="atkBuff.h">
+      <Filter>NPC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

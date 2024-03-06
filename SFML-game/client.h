@@ -6,8 +6,8 @@
 class Client
 {
 public:
-	static Client& getInstance(Data* data, Processor* processor) {
-		static Client instance(data, processor);
+	static Client& getInstance() {
+		static Client instance;
 		return instance;
 	}
 	~Client();
@@ -19,10 +19,9 @@ public:
 	void startRecieveLoop();
 	
 private:
-	Client(Data* data, Processor* processor);
+	Client();
 
 	std::thread receiveThread;
-	Processor* processor;
 	sf::TcpSocket* socket;
 	sf::SocketSelector* selector;
 };

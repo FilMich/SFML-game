@@ -1,6 +1,6 @@
 #include "lobby.h"
 
-Lobby::Lobby(sf::RenderWindow* window, Data* data, Processor* processor) :data(data), processor(processor)
+Lobby::Lobby(sf::RenderWindow* window)
 {
     //this->players = data->getPlayers();
     this->window = window;
@@ -9,7 +9,6 @@ Lobby::Lobby(sf::RenderWindow* window, Data* data, Processor* processor) :data(d
     this->font = new sf::Font();
     this->image = new sf::Texture();
     this->bg = new sf::Sprite();
-
     //sf::TcpSocket* client = new sf::TcpSocket;
     //players->push_back(new Player(client, 1, sf::Color().Green));
     ////sf::TcpSocket* client = new sf::TcpSocket;
@@ -30,7 +29,7 @@ Lobby::Lobby(sf::RenderWindow* window, Data* data, Processor* processor) :data(d
 
 Lobby::~Lobby()
 {
-    delete window;
+    
     delete readyRect;
     delete font;
     delete image;
@@ -46,8 +45,8 @@ void Lobby::draw()
     //std::cout << this->data->getMyID() << std::endl;
     
     
-
-    for (auto p : *this->data->getPlayers()) {
+    Data& data = data.getInstance();
+    for (auto p : *data.getPlayers()) {
         //std::cout << "position " << p->getShape()->getPosition().x << "x " << p->getShape()->getPosition().y << "y " << std::endl;
         window->draw(*p->getShape());
         sf::RectangleShape* playerReady = new sf::RectangleShape();
@@ -89,7 +88,7 @@ void Lobby::draw()
 void Lobby::run_lobby()
 {
     std::cout << "run lobby \n";
-    while (window->isOpen()) {
+    while (window->isOpen() && this->run) {
         loop_events();
         draw();
     }
@@ -102,7 +101,7 @@ void Lobby::set_values()
     font->loadFromFile("ethn.otf");
     image->loadFromFile("./lobby.png");
     bg->setTexture(*image);
-
+    
     sf::Vector2u windowSize = window->getSize();
 
     // Get the size of the loaded texture
@@ -131,6 +130,8 @@ void Lobby::set_values()
 
 void Lobby::loop_events()
 {
+    Data& data = data.getInstance(); 
+    Processor& processor = processor.getInstance();
     pos_mouse = sf::Mouse::getPosition(*window);
     mouse_coord = window->mapPixelToCoords(pos_mouse);
 
@@ -148,70 +149,58 @@ void Lobby::loop_events()
 
                     //after clicking ready check will change color for all players
 
-                    if (data->getIsReadyToPlay(data->getMyID()))
+                    if (data.getIsReadyToPlay(data.getMyID()))
                     {
-                        data->setIsNotReadyToPlay(data->getMyID());
-                        if (data->amIClient())
+                        data.setIsNotReadyToPlay(data.getMyID());
+                        if (data.amIClient())
                         {
-                            Client& client = client.getInstance(data, processor);
-                            client.send(processor->packData("isNotReadyToPlay", data->getMyID()));
+                            Client& client = client.getInstance();
+                            client.send(processor.packData("isNotReadyToPlay", data.getMyID()));
                         }
                         else
                         {
-                            Server& server = server.getInstance(data, processor);
-                            server.broadcastMessage(data->getPlayers(), processor->packData("isNotReadyToPlay", data->getMyID()));
+                            Server& server = server.getInstance();
+                            server.broadcastMessage(data.getPlayers(), processor.packData("isNotReadyToPlay", data.getMyID()));
                         }
                     }
                     else
                     {
-                        data->setIsReadyToPlay(data->getMyID());
-                        if (data->amIClient())
+                        data.setIsReadyToPlay(data.getMyID());
+                        if (data.amIClient())
                         {
-                            Client& client = client.getInstance(data, processor);
-                            client.send(processor->packData("isReadyToPlay", data->getMyID()));
+                            Client& client = client.getInstance();
+                            client.send(processor.packData("isReadyToPlay", data.getMyID()));
                         }
                         else
                         {
-                            Server& server = server.getInstance(data, processor);
-                            server.broadcastMessage(data->getPlayers(), processor->packData("isReadyToPlay", data->getMyID()));
+                            Server& server = server.getInstance();
+                            server.broadcastMessage(data.getPlayers(), processor.packData("isReadyToPlay", data.getMyID()));
                         }
                     }
-
-                    
-                    //client.send()
-
-                    /*if (readyRect->getFillColor() == sf::Color::Green)
-                    {
-                        readyRect->setFillColor(sf::Color::Red);
-                    }
-                    else
-                    {
-                        readyRect->setFillColor(sf::Color::Green);
-                    }*/
-
                 }
             }
         }
+        if (data.arePlayersReady())
+        {
+            window->clear();
+            this->run = false;
+            break;
+        }
+        /*int readyCount = 0;
+        Data& data = data.getInstance();
+        for (Player* p : *data.getPlayers()) {
+            if (p->isReadyToPlay())
+            {
+                readyCount++;
+            }
+        }
+        if (readyCount == data.getPlayers()->size())
+        {
+            this->run = false;
+        }*/
 
-        //if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-        //    //if (readyRect->getGlobalBounds().contains(mouse_coord)) {
-        //    //    //std::cout << "Close the window!" << '\n';
-        //    //    window->close();
-        //    //}
-        //    if (text.getGlobalBounds().contains(mouse_coord))
-        //    {
-        //        if (readyRect->getFillColor() == sf::Color::Green)
-        //        {
-        //            readyRect->setFillColor(sf::Color::Red);
-        //        }
-        //        else
-        //        {
-        //            readyRect->setFillColor(sf::Color::Green);
-        //        }
-
-        //    }
-        //}
     }
+    return;
 }
 
 

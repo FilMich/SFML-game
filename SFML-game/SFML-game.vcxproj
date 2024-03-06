@@ -139,25 +139,39 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="atkBuff.cpp" />
+    <ClCompile Include="bullet.cpp" />
     <ClCompile Include="client.cpp" />
+    <ClCompile Include="controls.cpp" />
     <ClCompile Include="data.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="lobby.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainMenu.cpp" />
+    <ClCompile Include="map.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="processor.cpp" />
     <ClCompile Include="server.cpp" />
+    <ClCompile Include="tile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="assetsManager.h" />
+    <ClInclude Include="atkBuff.h" />
+    <ClInclude Include="bullet.h" />
     <ClInclude Include="client.h" />
+    <ClInclude Include="controls.h" />
     <ClInclude Include="data.h" />
+    <ClInclude Include="game.h" />
     <ClInclude Include="lobby.h" />
     <ClInclude Include="mainMenu.h" />
+    <ClInclude Include="map.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="processor.h" />
     <ClInclude Include="server.h" />
+    <ClInclude Include="textureType.h" />
+    <ClInclude Include="tile.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="..\..\pong\pong\ethn.otf" />

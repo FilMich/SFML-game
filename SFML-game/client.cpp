@@ -1,6 +1,6 @@
 #include "client.h"
 
-Client::Client(Data* data, Processor* processor) : processor(processor)
+Client::Client()
 {
     this->socket = new sf::TcpSocket;
     this->selector = new sf::SocketSelector;
@@ -14,7 +14,8 @@ Client::~Client()
 void Client::connect()
 {
     std::cout << "Connecting to the server...\n";
-    if (socket->connect("192.168.0.239", 53000) != sf::Socket::Done) {
+    if (socket->connect("192.168.1.106", 53000) != sf::Socket::Done) {
+    //if (socket->connect("192.168.0.131", 53000) != sf::Socket::Done) {
         std::cerr << "Failed to connect to the server" << std::endl;
     }
     else {
@@ -45,7 +46,8 @@ void Client::receive()
                 std::string received = "";
                 packet >> received;
                 std::cout << "Received from the server: " << received << std::endl;
-                processor->unpackData(received);
+                Processor& processor = processor.getInstance();
+                processor.unpackData(received);
                 packet.clear();
             }
         }
